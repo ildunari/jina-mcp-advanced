@@ -12,9 +12,9 @@ npm install -g @ildunari/jina-mcp-advanced
 npx @ildunari/jina-mcp-advanced
 ```
 
-## Usage with MCP Client
+## Usage with MCP Client (Claude Desktop)
 
-Add this to your MCP client configuration:
+Add this to your Claude Desktop configuration:
 
 ```json
 {
@@ -23,7 +23,23 @@ Add this to your MCP client configuration:
       "command": "npx",
       "args": [
         "@ildunari/jina-mcp-advanced@latest",
-        "--headless",
+        "mcp-wrapper.js",
+        "--apiKey",
+        "YOUR_JINA_API_KEY"
+      ]
+    }
+  }
+}
+```
+
+Or if you have it installed globally:
+
+```json
+{
+  "mcpServers": {
+    "Jina-MCP-Advanced": {
+      "command": "jina-mcp-server",
+      "args": [
         "--apiKey",
         "YOUR_JINA_API_KEY"
       ]

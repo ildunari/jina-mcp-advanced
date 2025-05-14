@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "Jina-MCP-Advanced": {
+      "command": "npx",
+      "args": [
+        "@ildunari/jina-mcp-advanced@latest",
+        "--headless",
+        "--apiKey",
+        "YOUR_JINA_API_KEY"
+      ]
+    }
+  }
+}
