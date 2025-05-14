@@ -130,138 +130,163 @@ async function jina_reader_advanced(params) {
   }
 }
 
-// Create the MCP server
-const server = new Server(
-  {
-    name: 'jina-mcp-advanced',
-    version: '1.0.0',
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
-
-// Define the single tool we offer
-server.setRequestHandler('tools/list', async () => {
-  return {
-    tools: [
+// Create the MCP server - proper way
+class JinaMCPServer {
+  constructor() {
+    this.server = new Server(
       {
-        name: 'fetch_web_content',
-        description: 'Fetch and extract content from a URL using Jina Reader',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            url: {
-              type: 'string',
-              description: 'The URL to fetch content from',
-            },
-            return_format: {
-              type: 'string',
-              enum: ['default', 'markdown', 'html', 'text', 'screenshot', 'pageshot'],
-              default: 'markdown',
-              description: 'The desired format for the scraped content',
-            },
-            engine: {
-              type: 'string',
-              enum: ['default', 'browser'],
-              default: 'default',
-              description: 'The rendering engine to use',
-            },
-            json_response: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to return JSON response',
-            },
-            retain_images: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to retain images in the output',
-            },
-            summarize_links: {
-              type: 'boolean',
-              default: true,
-              description: 'Whether to summarize links',
-            },
-            summarize_images: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to summarize images',
-            },
-            image_caption: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to generate image captions',
-            },
-            use_readerlm: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to use ReaderLM',
-            },
-            bypass_cache: {
-              type: 'boolean',
-              default: false,
-              description: 'Whether to bypass cache',
-            },
-            target_selector: {
-              type: 'string',
-              description: 'CSS selector for specific content',
-            },
-            wait_for_selector: {
-              type: 'string',
-              description: 'Wait for element before scraping',
-            },
-            exclude_selector: {
-              type: 'string',
-              description: 'Elements to exclude',
-            },
-            timeout: {
-              type: 'integer',
-              description: 'Request timeout in seconds',
-            },
-          },
-          required: ['url'],
-        },
+        name: 'jina-mcp-advanced',
+        version: '1.0.0',
       },
-    ],
-  };
-});
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
-// Handle tool calls
-server.setRequestHandler('tools/call', async (request) => {
-  if (request.params.name === 'fetch_web_content') {
-    try {
-      const content = await jina_reader_advanced(request.params.arguments);
-      return {
-        content: [
-          {
-            type: 'text',
-            text: typeof content === 'string' ? content : JSON.stringify(content, null, 2),
-          },
-        ],
-      };
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: 'text',
-            text: `Error: ${error.message}`,
-          },
-        ],
-        isError: true,
-      };
-    }
+    // Error handling to catch SDK errors
+    this.server.onerror = (error) => {
+      console.error('[MCP Error]', error);
+    };
+
+    this.setupHandlers();
   }
-  throw new Error(`Unknown tool: ${request.params.name}`);
-});
+
+  setupHandlers() {
+    // Define the tools handler
+    this.server.setRequestHandler({
+      method: 'tools/list',
+      handler: async () => {
+        return {
+          tools: [
+            {
+              name: 'fetch_web_content',
+              description: 'Fetch and extract content from a URL using Jina Reader',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  url: {
+                    type: 'string',
+                    description: 'The URL to fetch content from',
+                  },
+                  return_format: {
+                    type: 'string',
+                    enum: ['default', 'markdown', 'html', 'text', 'screenshot', 'pageshot'],
+                    default: 'markdown',
+                    description: 'The desired format for the scraped content',
+                  },
+                  engine: {
+                    type: 'string',
+                    enum: ['default', 'browser'],
+                    default: 'default',
+                    description: 'The rendering engine to use',
+                  },
+                  json_response: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to return JSON response',
+                  },
+                  retain_images: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to retain images in the output',
+                  },
+                  summarize_links: {
+                    type: 'boolean',
+                    default: true,
+                    description: 'Whether to summarize links',
+                  },
+                  summarize_images: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to summarize images',
+                  },
+                  image_caption: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to generate image captions',
+                  },
+                  use_readerlm: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to use ReaderLM',
+                  },
+                  bypass_cache: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to bypass cache',
+                  },
+                  target_selector: {
+                    type: 'string',
+                    description: 'CSS selector for specific content',
+                  },
+                  wait_for_selector: {
+                    type: 'string',
+                    description: 'Wait for element before scraping',
+                  },
+                  exclude_selector: {
+                    type: 'string',
+                    description: 'Elements to exclude',
+                  },
+                  timeout: {
+                    type: 'integer',
+                    description: 'Request timeout in seconds',
+                  },
+                },
+                required: ['url'],
+              },
+            },
+          ],
+        };
+      }
+    });
+
+    // Handle tool calls
+    this.server.setRequestHandler({
+      method: 'tools/call',
+      handler: async (request) => {
+        if (request.params.name === 'fetch_web_content') {
+          try {
+            const content = await jina_reader_advanced(request.params.arguments);
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: typeof content === 'string' ? content : JSON.stringify(content, null, 2),
+                },
+              ],
+            };
+          } catch (error) {
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: `Error: ${error.message}`,
+                },
+              ],
+              isError: true,
+            };
+          }
+        }
+        throw new Error(`Unknown tool: ${request.params.name}`);
+      }
+    });
+  }
+
+  async start() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error('Jina MCP Server started');
+  }
+}
 
 // Start the server
-const transport = new StdioServerTransport();
-await server.connect(transport);
+const mcpServer = new JinaMCPServer();
+mcpServer.start().catch(console.error);
 
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
-  await server.close();
+  console.error('Shutting down server...');
   process.exit(0);
 });
