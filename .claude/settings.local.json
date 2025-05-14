@@ -6,7 +6,8 @@
       "mcp__Desktop_Commander__execute_command",
       "mcp__github__create_repository",
       "mcp__github__get_me",
-      "mcp__Desktop_Commander__read_output"
+      "mcp__Desktop_Commander__read_output",
+      "mcp__Desktop_Commander__edit_block"
     ],
     "deny": []
   }
