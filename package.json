@@ -4,7 +4,7 @@
   "description": "MCP Server for Jina.AI Advanced web scraping",
   "main": "index.js",
   "bin": {
-    "jina-mcp": "./index.js"
+    "jina-mcp": "index.js"
   },
   "type": "module",
   "scripts": {
