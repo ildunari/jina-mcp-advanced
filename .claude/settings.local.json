@@ -3,7 +3,10 @@
     "allow": [
       "mcp__Desktop_Commander__create_directory",
       "mcp__Desktop_Commander__write_file",
-      "mcp__Desktop_Commander__execute_command"
+      "mcp__Desktop_Commander__execute_command",
+      "mcp__github__create_repository",
+      "mcp__github__get_me",
+      "mcp__Desktop_Commander__read_output"
     ],
     "deny": []
   }
