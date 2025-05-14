@@ -14,16 +14,17 @@ npx @ildunari/jina-mcp-advanced
 
 ## Usage with MCP Client (Claude Desktop)
 
-Add this to your Claude Desktop configuration:
+Add this to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
 ```json
 {
   "mcpServers": {
-    "Jina-MCP-Advanced": {
+    "JinaAI-Advanced-MCP": {
       "command": "npx",
       "args": [
+        "-y",
         "@ildunari/jina-mcp-advanced@latest",
-        "mcp-wrapper.js",
+        "--mcp",
         "--apiKey",
         "YOUR_JINA_API_KEY"
       ]
@@ -37,9 +38,10 @@ Or if you have it installed globally:
 ```json
 {
   "mcpServers": {
-    "Jina-MCP-Advanced": {
-      "command": "jina-mcp-server",
+    "JinaAI-Advanced-MCP": {
+      "command": "jina-mcp",
       "args": [
+        "--mcp",
         "--apiKey",
         "YOUR_JINA_API_KEY"
       ]
@@ -47,6 +49,20 @@ Or if you have it installed globally:
   }
 }
 ```
+
+## Usage Modes
+
+The package can run in two modes:
+
+1. **Express Server Mode** (default): Runs as a standalone HTTP server
+   ```bash
+   npx @ildunari/jina-mcp-advanced --apiKey YOUR_API_KEY
+   ```
+
+2. **MCP Mode**: Runs as an MCP server for Claude Desktop
+   ```bash
+   npx @ildunari/jina-mcp-advanced --mcp --apiKey YOUR_API_KEY
+   ```
 
 ## API Endpoints
 

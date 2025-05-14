@@ -1,11 +1,10 @@
 {
   "name": "@ildunari/jina-mcp-advanced",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MCP Server for Jina.AI Advanced web scraping",
   "main": "index.js",
   "bin": {
-    "jina-mcp": "index.js",
-    "jina-mcp-server": "mcp-wrapper.js"
+    "jina-mcp": "cli.js"
   },
   "type": "module",
   "scripts": {
