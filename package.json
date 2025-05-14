@@ -1,0 +1,30 @@
+{
+  "name": "@ildunari/jina-mcp-advanced",
+  "version": "1.0.0",
+  "description": "MCP Server for Jina.AI Advanced web scraping",
+  "main": "index.js",
+  "bin": {
+    "jina-mcp-advanced": "./index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "jina",
+    "mcp",
+    "web-scraping",
+    "ai"
+  ],
+  "author": "ildunari",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
+    "yargs": "^17.7.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

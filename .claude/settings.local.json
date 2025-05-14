@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Desktop_Commander__create_directory",
+      "mcp__Desktop_Commander__write_file",
+      "mcp__Desktop_Commander__execute_command"
+    ],
+    "deny": []
+  }
+}
